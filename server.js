@@ -69,7 +69,7 @@ app.put('/fruits/:id', async (req, res) => {
         await Fruit.findOneAndUpdate({ '_id': req.params.id }, 
             req.body, { new: true })
             .then(() => {
-                res.redirect('/fruits/${req.params.id}')
+                res.redirect(`/fruits/${req.params.id}`)
             })
     } catch (error) {
         res.status(400).send({ message: error.message })
@@ -94,9 +94,19 @@ app.post('/fruits', async (req, res) => {
 
 // EDIT
     // Show you a form that lets you edit the fruit
+app.get('/fruits/:id/edit', async (req, res) => {
+    try {
+        const foundFruit = await Fruit.findOne({'_id': req.params.id})
+        res.render('fruits/Edit', {
+            fruit: foundFruit
+        })
+    } catch (error) {
+        res.status(400).send({ message: error.message })
+    }
+})
 
 // SHOW
-    // Shows you 1 individual fruit
+// Shows you 1 individual fruit
 app.get('/fruits/:id', async (req, res) => {
     try {
         const foundFruit = await Fruit.findOne({_id: req.params.id})
